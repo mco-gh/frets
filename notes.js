@@ -41,6 +41,10 @@ export const DECK = Object.freeze(STRINGS.flatMap((s) =>
     return Object.freeze({ id: `${s}-${f}`, s, f, midi, pc: midi % 12 });
   })));
 
+/** Every other place on the neck (up to `frets`) with the same note name, in any octave. */
+export const sameNote = (card, frets) =>
+  DECK.filter((c) => c.pc === card.pc && c.id !== card.id && c.f <= frets);
+
 /** Other places on the neck (up to `frets`) that sound the very same pitch. */
 export const unisons = (card, frets) =>
   DECK.filter((c) => c.midi === card.midi && c.id !== card.id && c.f <= frets);

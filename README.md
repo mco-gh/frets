@@ -3,7 +3,8 @@
 Fretboard flashcards with spaced repetition. Each card shows an electric guitar neck
 in standard tuning (E A D G B E) with one spot highlighted; name the note by tapping
 it on the keys under the card (or typing it), or just flip the card. The back names
-the note and rings every other place on the neck with the same pitch.
+the note and rings every other place on the neck with that note, solid where it's
+the very same pitch.
 
 A sibling of [Words](https://github.com/mco-gh/words) and
 [Geo](https://github.com/mco-gh/geo): the same scheduler, layout and behavior, in its

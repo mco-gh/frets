@@ -5,7 +5,7 @@ import {
 } from './store.js';
 import {
   DECK, STRINGS, STRING_NAME, isNatural, noteName, shortName, sharpName, flatName,
-  placeName, pitchName, ordinal, unisons, LETTERS, NATURALS,
+  placeName, pitchName, ordinal, unisons, sameNote, LETTERS, NATURALS,
 } from './notes.js';
 import { drawFretboard } from './fretboard.js';
 
@@ -161,15 +161,19 @@ function fillName(target, pc) {
 }
 
 function sameText(card) {
+  const others = sameNote(card, settings.frets).length;
+  const all = `Every ${noteName(card.pc)} on the neck is ringed (${others + 1} in all).`;
   const same = unisons(card, settings.frets);
-  if (!same.length) return '';
+  if (!same.length) return all;
   const where = same.map((c) => (c.f === 0 ? `open ${ordinal(c.s)} string` : `${ordinal(c.s)} string ${ordinal(c.f)} fret`));
-  return `Same pitch (${pitchName(card.midi)}): ${where.join(', ')}`;
+  return `${all} Solid rings are the very same pitch, ${pitchName(card.midi)}: ${where.join(', ')}.`;
 }
 
 function answerMarks(card) {
   return [
-    ...unisons(card, settings.frets).map((c) => ({ s: c.s, f: c.f, type: 'same', label: shortName(c.pc) })),
+    ...sameNote(card, settings.frets).map((c) => ({
+      s: c.s, f: c.f, type: 'same', label: shortName(c.pc), cls: c.midi === card.midi ? 'unison' : '',
+    })),
     { s: card.s, f: card.f, type: 'answer', label: shortName(card.pc) },
   ];
 }

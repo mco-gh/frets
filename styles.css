@@ -300,6 +300,8 @@ main {
 .fb-ring { fill: rgb(20 12 4 / 0.55); stroke: var(--hl); stroke-width: 2.4; stroke-dasharray: 4 3; }
 .fb-label { font-weight: 800; fill: #2a1600; }
 .fb-same .fb-label { fill: #ffe2a3; font-weight: 700; }
+/* The very same pitch (not just the same note an octave away): a solid ring. */
+.fb-same.unison .fb-ring { stroke-dasharray: none; stroke-width: 3; fill: rgb(60 30 0 / 0.7); }
 
 /* The overview neck: every position, colored by how well it's known */
 .fb-status { cursor: pointer; outline: none; }
