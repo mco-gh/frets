@@ -53,7 +53,6 @@ export function sanitizeSettings(s = {}) {
     frets: Math.round(num(s.frets, 1, MAX_FRETS, d.frets)),
     accidentals: typeof s.accidentals === 'boolean' ? s.accidentals : d.accidentals,
     strings: strings.length ? strings : [...d.strings],
-    sound: typeof s.sound === 'boolean' ? s.sound : d.sound,
     wood: WOODS.includes(s.wood) ? s.wood : d.wood,
   };
 }

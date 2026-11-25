@@ -8,7 +8,6 @@ import {
   placeName, pitchName, ordinal, unisons, LETTERS, NATURALS,
 } from './notes.js';
 import { drawFretboard } from './fretboard.js';
-import { playNote } from './sound.js';
 
 const $ = (id) => document.getElementById(id);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -259,7 +258,6 @@ function reveal(pc = null) {
     verdict.textContent = right ? '✓ Right' : `✗ You picked ${noteName(pc)}`;
   }
   setFlipped(true);
-  if (settings.sound) playNote(card.midi);
   const focus = pc !== null && pc !== card.pc ? '.rate-1' : '.rate-3';
   $('ratings').querySelector(focus).focus({ preventScroll: true });
 }
@@ -349,9 +347,7 @@ function openPreview(i) {
   }
   if (!active(i)) status += ' · not being studied';
   $('preview-status').textContent = status;
-  $('preview-play').dataset.midi = c.midi;
   $('preview').showModal();
-  if (settings.sound) playNote(c.midi);
 }
 
 function el(tag, className, text) {
@@ -491,7 +487,6 @@ function fillSettingsForm() {
   for (const input of document.querySelectorAll('input[name="string"]')) input.checked = settings.strings.includes(+input.value);
   $('frets').value = settings.frets;
   $('accidentals').checked = settings.accidentals;
-  $('sound').checked = settings.sound;
   for (const input of document.querySelectorAll('input[name="wood"]')) input.checked = input.value === settings.wood;
   $('newPerDay').value = settings.newPerDay;
   $('maxReviews').value = settings.maxReviews;
@@ -562,7 +557,6 @@ function wireEvents() {
     const key = e.target.closest('.key');
     if (key) reveal(+key.dataset.pc);
   });
-  $('play').addEventListener('click', () => { if (queue[0]) playNote(deck[queue[0].id].midi); });
   $('ratings').addEventListener('click', (e) => {
     const btn = e.target.closest('.rate');
     if (btn) answer(+btn.dataset.rating);
@@ -592,7 +586,6 @@ function wireEvents() {
       e.preventDefault();
       reveal(pc);
     } else if (flipped && e.key >= '1' && e.key <= '4') { e.preventDefault(); answer(+e.key); }
-    else if (flipped && key === 'p' && queue[0]) playNote(deck[queue[0].id].midi);
     else if (key === 'z' && undoState) undo();
   });
 
@@ -613,7 +606,6 @@ function wireEvents() {
   $('fb-neck').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openFromNeck(e); }
   });
-  $('preview-play').addEventListener('click', (e) => playNote(+e.currentTarget.dataset.midi));
 
   // Settings
   $('string-checks').addEventListener('change', (e) => {
@@ -635,7 +627,6 @@ function wireEvents() {
     updateSettings({ accidentals: e.target.checked });
     settingsChanged();
   });
-  $('sound').addEventListener('change', (e) => updateSettings({ sound: e.target.checked }));
   $('wood').addEventListener('change', (e) => {
     updateSettings({ wood: e.target.value });
     if (queue[0]) drawCard(deck[queue[0].id]);

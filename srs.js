@@ -19,7 +19,6 @@ export const DEFAULT_SETTINGS = Object.freeze({
   frets: 22,          // how many frets the neck has (cards above it are paused)
   accidentals: false, // include sharps and flats, or only the natural notes A–G
   strings: [6, 5, 4, 3, 2, 1],
-  sound: true,        // play the note when the answer is shown
   wood: 'rosewood',   // 'rosewood' | 'ebony' | 'maple'
 });
 

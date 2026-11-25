@@ -3,7 +3,7 @@
 Fretboard flashcards with spaced repetition. Each card shows an electric guitar neck
 in standard tuning (E A D G B E) with one spot highlighted; name the note by tapping
 it on the keys under the card (or typing it), or just flip the card. The back names
-the note, plays it, and rings every other place on the neck with the same pitch.
+the note and rings every other place on the neck with the same pitch.
 
 A sibling of [Words](https://github.com/mco-gh/words) and
 [Geo](https://github.com/mco-gh/geo): the same scheduler, layout and behavior, in its
@@ -17,7 +17,6 @@ server code, no build step, no login, all progress in the browser's localStorage
   asked (84 positions on a 22-fret neck; 138 with sharps and flats).
 - **Strings**: study any subset of the six.
 - **Fretboard**: rosewood, ebony or maple.
-- **Play the note when the answer is shown**: on by default.
 - The usual Words/Geo spaced-repetition settings, with three new-card orders:
   up the neck (open strings first, then three frets at a time), one string at a
   time, or random.
@@ -47,7 +46,6 @@ developing, unregister it (DevTools → Application) or reloads may show old fil
 | `store.js` | localStorage persistence (`frets:settings`, `frets:progress`, `frets:scheme`) |
 | `notes.js` | tuning, note names, and the deck: every position on a 24-fret neck |
 | `fretboard.js` | draws a fretboard as inline SVG, horizontal or vertical |
-| `sound.js` | synthesizes a plucked note (Karplus–Strong), in tune to within a cent |
 
 Progress is keyed by position id: `"5-3"` is the 5th string (A), 3rd fret. Ids never
 change, so settings can be changed freely without losing progress.

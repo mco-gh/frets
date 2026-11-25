@@ -1,6 +1,6 @@
 // Offline support: precache the whole app, serve from cache, refresh in the background.
 // Bump VERSION whenever any file below changes.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = `frets-${VERSION}`;
 const ASSETS = [
   './',
@@ -11,7 +11,6 @@ const ASSETS = [
   './store.js',
   './notes.js',
   './fretboard.js',
-  './sound.js',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/icon-192.png',

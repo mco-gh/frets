@@ -91,9 +91,6 @@
               </div>
               <div class="face back" id="face-back" inert>
                 <span class="verdict" id="verdict" hidden></span>
-                <button class="play-btn" type="button" id="play" aria-label="Play the note" title="Play the note (P)">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5Z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
-                </button>
                 <svg class="board" id="fb-back" aria-hidden="true"></svg>
                 <p class="name" id="name"></p>
                 <p class="where" id="where"></p>
@@ -142,7 +139,7 @@
           <label><input type="radio" name="labels" value="hidden"><span>Hide names</span></label>
         </div>
       </div>
-      <p class="muted">Tap any note to hear it and see where else it is. The colors show how well you know each one.</p>
+      <p class="muted">Tap any note to see where else it is. The colors show how well you know each one.</p>
       <div class="neck-wrap" id="neck-wrap">
         <svg class="board" id="fb-neck" aria-label="The fretboard, every note"></svg>
       </div>
@@ -192,7 +189,6 @@
       <p class="preview-status" id="preview-status"></p>
     </div>
     <form method="dialog" class="dialog-foot">
-      <button class="soft-btn" type="button" id="preview-play">▶ Play</button>
       <button class="primary-btn" autofocus>Close</button>
     </form>
   </dialog>
@@ -228,10 +224,6 @@
           <label><input type="radio" name="wood" value="ebony"><span>Ebony</span></label>
           <label><input type="radio" name="wood" value="maple"><span>Maple</span></label>
         </div>
-        <label class="check">
-          <input type="checkbox" id="sound">
-          <span>Play the note when the answer is shown</span>
-        </label>
       </fieldset>
 
       <fieldset class="field">
@@ -307,7 +299,7 @@
     <div class="dialog-body about">
       <section>
         <h3>What it is</h3>
-        <p>Frets is a free flashcard app for learning the notes on the guitar neck. Each card shows an electric guitar fretboard in standard tuning (E A D G B E) with one spot highlighted. Name the note, then flip the card to check: the back names it, plays it, and marks every other place on the neck with the very same pitch.</p>
+        <p>Frets is a free flashcard app for learning the notes on the guitar neck. Each card shows an electric guitar fretboard in standard tuning (E A D G B E) with one spot highlighted. Name the note, then flip the card to check: the back names it and marks every other place on the neck with the very same pitch.</p>
       </section>
       <section>
         <h3>What you can do</h3>
@@ -332,7 +324,7 @@
       </section>
       <section>
         <h3>Credits</h3>
-        <p>The fretboard is drawn in your browser as SVG, and the notes are synthesized as you play them (the Karplus–Strong plucked-string method). Nothing is downloaded but the app itself.</p>
+        <p>The fretboard is drawn in your browser as SVG. Nothing is downloaded but the app itself.</p>
       </section>
     </div>
     <form method="dialog" class="dialog-foot">
