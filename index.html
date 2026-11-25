@@ -248,19 +248,19 @@
         <fieldset class="choices" id="order">
           <legend>New card order</legend>
           <label class="choice">
+            <input type="radio" name="order" value="random" aria-describedby="order-random-help">
+            <span class="choice-title">Random <span class="tag">Default</span></span>
+            <span class="choice-help" id="order-random-help">Anywhere on the neck, each note equally likely, so you learn the whole fretboard at once.</span>
+          </label>
+          <label class="choice">
             <input type="radio" name="order" value="neck" aria-describedby="order-neck-help">
-            <span class="choice-title">Up the neck <span class="tag">Recommended</span></span>
+            <span class="choice-title">Up the neck</span>
             <span class="choice-help" id="order-neck-help">Starts with the open strings, then works up a few frets at a time, mixing the strings. The way most teachers do it.</span>
           </label>
           <label class="choice">
             <input type="radio" name="order" value="string" aria-describedby="order-string-help">
             <span class="choice-title">One string at a time</span>
             <span class="choice-help" id="order-string-help">The whole low E string first, then the A string, and so on. Handy for root notes on the bottom two strings.</span>
-          </label>
-          <label class="choice">
-            <input type="radio" name="order" value="random" aria-describedby="order-random-help">
-            <span class="choice-title">Random</span>
-            <span class="choice-help" id="order-random-help">Anywhere on the neck, each note equally likely. For when you already know first position.</span>
           </label>
         </fieldset>
         <div class="row">

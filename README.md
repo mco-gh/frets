@@ -18,8 +18,8 @@ server code, no build step, no login, all progress in the browser's localStorage
 - **Strings**: study any subset of the six.
 - **Fretboard**: rosewood, ebony or maple.
 - The usual Words/Geo spaced-repetition settings, with three new-card orders:
-  up the neck (open strings first, then three frets at a time), one string at a
-  time, or random.
+  random (the default), up the neck (open strings first, then three frets at a
+  time), or one string at a time.
 
 ## Where it lives
 

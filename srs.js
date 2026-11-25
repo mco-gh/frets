@@ -14,7 +14,7 @@ export const AGAIN = 1, HARD = 2, GOOD = 3, EASY = 4;
 export const DEFAULT_SETTINGS = Object.freeze({
   newPerDay: 10,      // new cards introduced per daily session
   maxReviews: 100,    // cap on due reviews per daily session
-  order: 'neck',      // 'neck' (first position upward) | 'string' (one string at a time) | 'random'
+  order: 'random',    // 'random' | 'neck' (first position upward) | 'string' (one string at a time)
   pace: 1,            // interval multiplier: <1 = see cards more often, >1 = less often
   frets: 22,          // how many frets the neck has (cards above it are paused)
   accidentals: false, // include sharps and flats, or only the natural notes A–G
