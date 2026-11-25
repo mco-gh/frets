@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Frets — learn every note on the guitar fretboard</title>
+  <meta name="description" content="Fretboard flashcards with spaced repetition: learn the name of every note on the electric guitar neck, a few minutes a day. Works offline; your progress stays on your device.">
+  <meta name="color-scheme" content="light">
+  <script>
+    try { document.querySelector('meta[name="color-scheme"]').content = JSON.parse(localStorage.getItem('frets:scheme')) ?? 'light'; } catch {}
+  </script>
+  <meta name="theme-color" content="#f7f2ec" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151214" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Frets">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-wrap">
+      <a class="brand" href="#study">
+        <svg class="logo" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="7" y="3" width="20" height="24" rx="5" class="logo-back"/>
+          <rect x="4" y="6" width="20" height="24" rx="5" class="logo-front"/>
+          <path d="M9 11v14M14 11v14M19 11v14" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3"/>
+          <path d="M7 14.5h14M7 18h14M7 21.5h14" stroke="#fff" stroke-width="1.5"/>
+          <circle cx="16.5" cy="18" r="2.6" fill="#ffb627" stroke="#fff" stroke-width="1"/>
+        </svg>
+        <span>Frets</span>
+      </a>
+      <p class="credit">Made with ❤️ by <a href="https://mco.dev/">Marc</a><a class="apps-link" href="https://mco.dev/apps/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg>All apps</a></p>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" type="button" command="show-modal" commandfor="about" aria-label="About" title="About">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.75" r="0.6" fill="currentColor"/></svg>
+      </button>
+      <button class="icon-btn" type="button" command="show-modal" commandfor="settings" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4.5v5M6 14.5v5" /><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Frets">
+    <a href="#study" data-tab="study">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3" width="13" height="16" rx="3"/><path d="M4 8v10a3 3 0 0 0 3 3h8"/></svg>
+      <span>Study</span>
+    </a>
+    <a href="#neck" data-tab="neck">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="10" rx="1.5"/><path d="M8 7v10M13 7v10M17.5 7v10"/></svg>
+      <span>Neck</span>
+    </a>
+    <a href="#progress" data-tab="progress">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20v-6M12 20V4M19 20v-9"/></svg>
+      <span>Progress</span>
+    </a>
+  </nav>
+
+  <main id="main">
+    <p class="tagline">Learn every note on the guitar neck, in just a few minutes a day.</p>
+
+    <!-- Study -->
+    <section class="view" id="view-study" aria-labelledby="h-study" hidden>
+      <h1 class="visually-hidden" id="h-study">Study</h1>
+
+      <div class="session" id="session">
+        <div class="session-head">
+          <ul class="chips">
+            <li class="chip chip-new"><b id="count-new">0</b> New</li>
+            <li class="chip chip-learning"><b id="count-learning">0</b> Learning</li>
+            <li class="chip chip-review"><b id="count-review">0</b> Review</li>
+          </ul>
+          <button class="ghost-btn" type="button" id="undo" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>
+            Undo
+          </button>
+        </div>
+        <progress class="bar" id="session-bar" value="0" max="1" aria-label="Today’s session progress"></progress>
+
+        <div class="stage" id="stage">
+          <div class="card" id="card">
+            <div class="card-inner">
+              <div class="face front" id="face-front">
+                <span class="badge" id="badge-new" hidden>New</span>
+                <svg class="board" id="fb-front" role="img" aria-label="Guitar fretboard with one note highlighted"></svg>
+                <p class="question">Name this note</p>
+                <p class="hint" id="hint">Pick it below, or tap the card to see the answer</p>
+              </div>
+              <div class="face back" id="face-back" inert>
+                <span class="verdict" id="verdict" hidden></span>
+                <button class="play-btn" type="button" id="play" aria-label="Play the note" title="Play the note (P)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5Z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>
+                </button>
+                <svg class="board" id="fb-back" aria-hidden="true"></svg>
+                <p class="name" id="name"></p>
+                <p class="where" id="where"></p>
+                <p class="note" id="same"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <div class="pick" id="pick">
+            <div class="keys" id="keys" role="group" aria-label="Which note is it?"></div>
+            <button class="ghost-btn reveal-btn" type="button" id="show">Not sure? Show the answer</button>
+          </div>
+          <div class="ratings" id="ratings" role="group" aria-label="How well did you know it?" hidden>
+            <button type="button" class="rate rate-1" data-rating="1"><span>Again</span><small></small><kbd>1</kbd></button>
+            <button type="button" class="rate rate-2" data-rating="2"><span>Hard</span><small></small><kbd>2</kbd></button>
+            <button type="button" class="rate rate-3" data-rating="3"><span>Good</span><small></small><kbd>3</kbd></button>
+            <button type="button" class="rate rate-4" data-rating="4"><span>Easy</span><small></small><kbd>4</kbd></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="done" id="done" hidden>
+        <svg class="done-mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28"/><path d="m20 33 8 8 16-18"/></svg>
+        <h2>All done for today</h2>
+        <p id="done-sub"></p>
+        <dl class="tiles">
+          <div class="tile"><dt>Studied today</dt><dd id="done-today">0</dd></div>
+          <div class="tile"><dt>Day streak</dt><dd id="done-streak">0</dd></div>
+          <div class="tile"><dt>Due tomorrow</dt><dd id="done-tomorrow">0</dd></div>
+        </dl>
+        <button class="primary-btn" type="button" id="more"></button>
+      </div>
+    </section>
+
+    <!-- Neck -->
+    <section class="view" id="view-neck" aria-labelledby="h-neck" hidden>
+      <h1 id="h-neck">The whole neck</h1>
+      <div class="toolbar">
+        <select id="note-filter" aria-label="Highlight a note">
+          <option value="all">Every note</option>
+        </select>
+        <div class="segmented two" id="label-mode" role="radiogroup" aria-label="Dot labels">
+          <label><input type="radio" name="labels" value="names" checked><span>Note names</span></label>
+          <label><input type="radio" name="labels" value="hidden"><span>Hide names</span></label>
+        </div>
+      </div>
+      <p class="muted">Tap any note to hear it and see where else it is. The colors show how well you know each one.</p>
+      <div class="neck-wrap" id="neck-wrap">
+        <svg class="board" id="fb-neck" aria-label="The fretboard, every note"></svg>
+      </div>
+      <ul class="legend" id="neck-legend"></ul>
+    </section>
+
+    <!-- Progress -->
+    <section class="view" id="view-progress" aria-labelledby="h-progress" hidden>
+      <h1 id="h-progress">Progress</h1>
+      <dl class="tiles">
+        <div class="tile"><dt>Day streak</dt><dd id="st-streak">0</dd></div>
+        <div class="tile"><dt>Notes learned</dt><dd id="st-learned">0</dd></div>
+        <div class="tile"><dt>Mastered</dt><dd id="st-mature">0</dd></div>
+        <div class="tile"><dt>Total reviews</dt><dd id="st-reviews">0</dd></div>
+      </dl>
+
+      <section class="panel" aria-labelledby="h-mastery">
+        <h2 id="h-mastery">Mastery</h2>
+        <div class="mastery-bar" id="mastery-bar" aria-hidden="true"></div>
+        <ul class="legend" id="mastery-legend"></ul>
+      </section>
+
+      <section class="panel" aria-labelledby="h-strings">
+        <h2 id="h-strings">By string</h2>
+        <ul class="topic-bars" id="string-bars"></ul>
+      </section>
+
+      <section class="panel" aria-labelledby="h-forecast">
+        <h2 id="h-forecast">Reviews due — next 14 days</h2>
+        <ol class="forecast" id="forecast"></ol>
+      </section>
+    </section>
+    <footer class="copyright">© 2026 Marc Cohen</footer>
+  </main>
+
+  <p class="toast" id="toast" role="status"></p>
+
+  <!-- Note preview (from the Neck) -->
+  <dialog id="preview" aria-labelledby="preview-name" closedby="any">
+    <div class="preview-board">
+      <svg class="board" id="fb-preview" aria-hidden="true"></svg>
+    </div>
+    <div class="dialog-body preview-body">
+      <h2 id="preview-name"></h2>
+      <p id="preview-where"></p>
+      <p class="muted" id="preview-same"></p>
+      <p class="preview-status" id="preview-status"></p>
+    </div>
+    <form method="dialog" class="dialog-foot">
+      <button class="soft-btn" type="button" id="preview-play">▶ Play</button>
+      <button class="primary-btn" autofocus>Close</button>
+    </form>
+  </dialog>
+
+  <!-- Settings -->
+  <dialog id="settings" aria-labelledby="settings-title" closedby="any">
+    <header class="dialog-head">
+      <h2 id="settings-title">Settings</h2>
+    </header>
+    <div class="dialog-body">
+      <fieldset class="field">
+        <legend>What to study</legend>
+        <div class="row">
+          <label for="frets">Number of frets</label>
+          <input type="number" id="frets" min="1" max="24" step="1" inputmode="numeric">
+        </div>
+        <label class="check">
+          <input type="checkbox" id="accidentals">
+          <span>Include sharps and flats</span>
+          <small>C♯ / D♭ …</small>
+        </label>
+        <p class="help">Off, you learn only the natural notes, A to G. Turning either of these down pauses cards; your progress on them is kept.</p>
+        <fieldset class="choices">
+          <legend>Strings</legend>
+          <div class="string-checks" id="string-checks"></div>
+        </fieldset>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Fretboard</legend>
+        <div class="segmented" id="wood">
+          <label><input type="radio" name="wood" value="rosewood"><span>Rosewood</span></label>
+          <label><input type="radio" name="wood" value="ebony"><span>Ebony</span></label>
+          <label><input type="radio" name="wood" value="maple"><span>Maple</span></label>
+        </div>
+        <label class="check">
+          <input type="checkbox" id="sound">
+          <span>Play the note when the answer is shown</span>
+        </label>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Appearance</legend>
+        <div class="segmented" id="scheme">
+          <label><input type="radio" name="scheme" value="light dark"><span id="scheme-system">System</span></label>
+          <label><input type="radio" name="scheme" value="light"><span>Light</span></label>
+          <label><input type="radio" name="scheme" value="dark"><span>Dark</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Spaced repetition</legend>
+        <div class="row">
+          <label for="newPerDay">New cards per day</label>
+          <input type="number" id="newPerDay" min="0" max="100" step="1" inputmode="numeric">
+        </div>
+        <div class="row">
+          <label for="maxReviews">Maximum reviews per day</label>
+          <input type="number" id="maxReviews" min="10" max="500" step="10" inputmode="numeric">
+        </div>
+        <fieldset class="choices" id="order">
+          <legend>New card order</legend>
+          <label class="choice">
+            <input type="radio" name="order" value="neck" aria-describedby="order-neck-help">
+            <span class="choice-title">Up the neck <span class="tag">Recommended</span></span>
+            <span class="choice-help" id="order-neck-help">Starts with the open strings, then works up a few frets at a time, mixing the strings. The way most teachers do it.</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="order" value="string" aria-describedby="order-string-help">
+            <span class="choice-title">One string at a time</span>
+            <span class="choice-help" id="order-string-help">The whole low E string first, then the A string, and so on. Handy for root notes on the bottom two strings.</span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="order" value="random" aria-describedby="order-random-help">
+            <span class="choice-title">Random</span>
+            <span class="choice-help" id="order-random-help">Anywhere on the neck, each note equally likely. For when you already know first position.</span>
+          </label>
+        </fieldset>
+        <div class="row">
+          <label for="pace">Review pace</label>
+          <select id="pace">
+            <option value="0.8">Intensive (shorter gaps)</option>
+            <option value="1">Standard</option>
+            <option value="1.3">Relaxed (longer gaps)</option>
+          </select>
+        </div>
+        <p class="help">Scales the gap between reviews. Assumes you study once a day.</p>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Your data</legend>
+        <p class="help">Progress is stored only in this browser.</p>
+        <div class="btn-row">
+          <button type="button" class="soft-btn" id="export">Export backup</button>
+          <button type="button" class="soft-btn" id="import">Import backup</button>
+          <input type="file" id="import-file" accept="application/json,.json" hidden>
+          <button type="button" class="soft-btn danger" command="show-modal" commandfor="reset">Reset progress</button>
+        </div>
+        <button type="button" class="soft-btn" id="install" hidden>Install app</button>
+      </fieldset>
+    </div>
+    <form method="dialog" class="dialog-foot">
+      <button class="primary-btn">Done</button>
+    </form>
+  </dialog>
+
+  <!-- About -->
+  <dialog id="about" aria-labelledby="about-title" closedby="any">
+    <header class="dialog-head">
+      <h2 id="about-title">About Frets</h2>
+    </header>
+    <div class="dialog-body about">
+      <section>
+        <h3>What it is</h3>
+        <p>Frets is a free flashcard app for learning the notes on the guitar neck. Each card shows an electric guitar fretboard in standard tuning (E A D G B E) with one spot highlighted. Name the note, then flip the card to check: the back names it, plays it, and marks every other place on the neck with the very same pitch.</p>
+      </section>
+      <section>
+        <h3>What you can do</h3>
+        <ul>
+          <li>Learn a few new notes each day: 10 by default, adjustable in Settings.</li>
+          <li>Tap the note on the keys under the card, or type it (A–G; hold Shift for a sharp). Or just flip the card and be honest with yourself.</li>
+          <li>Choose how many frets your guitar has (22 by default, up to 24), whether to include sharps and flats, and which strings to study.</li>
+          <li>Review each note just before you’re likely to forget it. This is called spaced repetition: notes you know well come back less and less often.</li>
+          <li>Rate each card Again, Hard, Good or Easy. Your answer decides when you’ll see it next.</li>
+          <li>See the whole neck at once in Neck, colored by how well you know each note, and pick out every C, or every F♯.</li>
+          <li>Follow your streak, mastery and upcoming reviews in Progress.</li>
+          <li>Use it offline, or install it on your phone or computer. There’s no account: your progress stays in this browser, and you can export a backup from Settings.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>A few tips</h3>
+        <ul>
+          <li>The 12th fret is the open string an octave up, so the pattern repeats from there.</li>
+          <li>Between E and F, and between B and C, there is only one fret. Every other pair of neighboring natural notes is two frets apart.</li>
+          <li>The 5th fret of each string is the next string’s open note, except on the G string, where it’s the 4th fret.</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Credits</h3>
+        <p>The fretboard is drawn in your browser as SVG, and the notes are synthesized as you play them (the Karplus–Strong plucked-string method). Nothing is downloaded but the app itself.</p>
+      </section>
+    </div>
+    <form method="dialog" class="dialog-foot">
+      <button class="primary-btn" autofocus>Close</button>
+    </form>
+  </dialog>
+
+  <dialog id="reset" aria-labelledby="reset-title" class="small">
+    <div class="dialog-body">
+      <h2 id="reset-title">Reset your progress?</h2>
+      <p>This erases your review history and schedule on this device. It cannot be undone.</p>
+    </div>
+    <form method="dialog" class="dialog-foot">
+      <button class="soft-btn" value="cancel" autofocus>Cancel</button>
+      <button class="soft-btn danger solid" value="reset">Erase progress</button>
+    </form>
+  </dialog>
+
+  <noscript><p class="load-error">Frets needs JavaScript to run.</p></noscript>
+</body>
+</html>
